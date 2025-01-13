@@ -15,6 +15,8 @@ from pidev.kivy.PauseScreen import PauseScreen
 from pidev.kivy import DPEAButton
 from pidev.kivy import ImageButton
 
+from dpea_odrive.odrive_helpers import *
+
 sys.path.append("/home/soft-dev/Documents/dpea-odrive/")
 from dpea_odrive.odrive_helpers import *
 MIXPANEL_TOKEN = "x"
@@ -47,6 +49,19 @@ class MainScreen(Screen):
     """
     Class to handle the main screen and its associated touch events
     """
+    def Toggle_CC_CCW(self):
+        print("Word?")
+        ax.set_vel(0)
+        ax.wait_for_motor_to_stop()
+        ax.set_relative_pos(5)
+        ax.wait_for_motor_to_stop()
+        ax.set_relative_pos(-5)
+        ax.wait_for_motor_to_stop()
+        sleep(3)
+
+    def velocity(self):
+        #ax.set_vel(self.ids.velocity.value)
+        ax.set_ramped_vel(self.ids.velocity.value, self.ids.accel.value)
 
     def switch_to_traj(self):
         SCREEN_MANAGER.transition.direction = "left"
@@ -163,4 +178,13 @@ def send_event(event_name):
 if __name__ == "__main__":
     # send_event("Project Initialized")
     # Window.fullscreen = 'auto'
+    od = find_odrive("207935A1524B")
+    assert od.config.enable_brake_resistor is True, "Check for faulty brake resistor."
+    ax = ODriveAxis(od.axis1)
+    dump_errors(od)
+    if not ax.is_calibrated():
+        print("calibrating...")
+        ax.calibrate_with_current_lim(10)
+    ax.set_vel(0)
+    ax.wait_for_motor_to_stop()
     ProjectNameGUI().run()
