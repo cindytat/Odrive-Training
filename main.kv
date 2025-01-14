@@ -17,8 +17,9 @@
         id: right_button
         text: '>'
         font_size: self.width * .5
-        size_hint: .1, 1
-        pos_hint: {"x": .9, "y":0}
+        size: 100, 100
+        x: root.width * 0.8
+        y: root.height * 0.5
         color: 0, 1, 0, 1
         on_press: root.switch_to_traj()
 
@@ -26,8 +27,9 @@
         id: left_button
         text: "<"
         font_size: self.width * .5
-        size_hint: .1, 1
-        pos_hint: {"x": 0, "y":0}
+        size: 100, 100
+        x: root.width * 0.1
+        y: root.height * 0.5
         color: 1, 0, 0, 1
         on_press: root.switch_to_gpio()
 
@@ -36,16 +38,16 @@
         min: 0
         max: 25
         step: 1
-        x: root.width * 0
-        y: root.height * -0.45
+        y: root.height * 0.25
+        size_hint: (1, 0.2)
         on_touch_up: root.velocity()
         on_touch_move: root.velocity()
-        sensitivity: "handle"
+        #sensitivity: "handle"
 
     Label:
         text: str(velocity.value)
-        x: root.width * 0.315
-        y: root.height * 0.33
+        x: root.width * 0.6
+        y: root.height * 0.6
         color: 0, 0, 0
 
     Slider:
@@ -53,16 +55,16 @@
         min: 0
         max: 25
         step: 1
-        x: root.width * 0
-        y: root.height * 0.45
+        y: root.height * 0.2
+        size_hint: (1, 0.1)
         on_touch_up: root.velocity()
         on_touch_move: root.velocity()
-        sensitivity: "handle"
+        #sensitivity: "handle"
 
     Label:
         text: str(accel.value)
-        x: root.width * 0.6
-        y: root.height * 0.6
+        x: root.width * 0.315
+        y: root.height * 0.33
         color: 0, 0, 0
 
 <TrajectoryScreen>:
@@ -79,6 +81,58 @@
         color: 0, 1, 0, 1
         on_press: root.switch_screen()
 
+    Label:
+        text: "Acceleration: "
+
+    TextInput:
+        id: acceleration
+        multinline: False
+        size_hint: (100/root.width, 100/root.height)
+        x: root.width * 0.315
+        y: root.height * 0.33
+        color: 0, 0, 0
+
+    Label:
+        text: "Deceleration: "
+
+    TextInput:
+        id: deceleration
+        multinline: False
+        size_hint: (100/root.width, 100/root.height)
+        x: root.width * 0.66
+        y: root.height * 0.66
+        color: 0, 0, 0
+
+    Label:
+        text: "Target Position: "
+
+    TextInput:
+        id: target
+        multinline: False
+        size_hint: (100/root.width, 100/root.height)
+        x: root.width * 0.1
+        y: root.height * 0.1
+        color: 0, 0, 0
+
+    Label:
+        text: "Velocity: "
+
+    TextInput:
+        id: velo
+        multinline: False
+        size_hint: (100/root.width, 100/root.height)
+        x: root.width * 0.4
+        y: root.height * 0.4
+        color: 0, 0, 0
+
+    DPEAButton:
+        id: submit
+        text:'Submit'
+        size: 100, 100
+        pos_hint: {"center_x": 0.1, "center_y":0.1}
+        color: 0, 1, 0, 1
+        on_press: root.trapezoid()
+
 <GPIOScreen>:
 
     name: 'main'
@@ -92,3 +146,4 @@
         pos_hint: {"center_x": 0.5, "center_y":0.5}
         color: 1, 0, 0, 1
         on_press: root.switch_screen()
+

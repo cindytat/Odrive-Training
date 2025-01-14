@@ -8,6 +8,9 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.textinput import TextInput
+from kivy.uix.widget import Widget
+from kivy.properties import ObjectProperty
 
 from pidev.MixPanel import MixPanel
 from pidev.kivy.PassCodeScreen import PassCodeScreen
@@ -61,7 +64,14 @@ class MainScreen(Screen):
 
     def velocity(self):
         #ax.set_vel(self.ids.velocity.value)
+        print("work")
         ax.set_ramped_vel(self.ids.velocity.value, self.ids.accel.value)
+
+    # def home(self):
+    #     print("homing")
+    #     # ax.home_with_endstop(1, .5, 2)  # Home with velocity 1 to sensor on GPIO Pin 2, then offset .5 rotations
+    #     ax.home_without_endstop(1, .5)  # Home with velocity 1 until wall is hit, then offset .5 rotations
+    #     print("Current Position in Turns = ", round(ax.get_pos(), 2))  # should be at 0.0
 
     def switch_to_traj(self):
         SCREEN_MANAGER.transition.direction = "left"
@@ -89,6 +99,16 @@ class TrajectoryScreen(Screen):
     def switch_screen(self):
         SCREEN_MANAGER.transition.direction = "right"
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
+
+    def trapezoid(self):
+        print("Trapezoid")
+        ax.set_rel_pos_traj(float(self.target.text), float(self.acceleration.text), float(self.velo.text), float(self.deceleration.text))
+
+    acceleration = ObjectProperty(None)
+    deceleration = ObjectProperty(None)
+    target = ObjectProperty(None)
+    velo = ObjectProperty(None)
+
 
 
 class GPIOScreen(Screen):
@@ -181,6 +201,7 @@ if __name__ == "__main__":
     od = find_odrive("207935A1524B")
     assert od.config.enable_brake_resistor is True, "Check for faulty brake resistor."
     ax = ODriveAxis(od.axis1)
+    ax.set_gains()
     dump_errors(od)
     if not ax.is_calibrated():
         print("calibrating...")
