@@ -110,7 +110,6 @@ class TrajectoryScreen(Screen):
     velo = ObjectProperty(None)
 
 
-
 class GPIOScreen(Screen):
     """
     Class to handle the GPIO screen and its associated touch/listening events

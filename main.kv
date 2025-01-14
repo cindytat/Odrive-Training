@@ -8,7 +8,7 @@
         id: Toggle_CC_CCW
         text: 'Toggle Motor'
         size: 100, 100
-        x: root.width * 0.5
+        x: root.width * 0.45
         y: root.height * 0.5
         color: 0, 0, 255, 1 #blue
         on_press: root.Toggle_CC_CCW()
@@ -33,39 +33,40 @@
         color: 1, 0, 0, 1
         on_press: root.switch_to_gpio()
 
-    Slider:
-        id: velocity
-        min: 0
-        max: 25
-        step: 1
-        y: root.height * 0.25
-        size_hint: (1, 0.2)
-        on_touch_up: root.velocity()
-        on_touch_move: root.velocity()
-        #sensitivity: "handle"
-
-    Label:
-        text: str(velocity.value)
-        x: root.width * 0.6
-        y: root.height * 0.6
-        color: 0, 0, 0
-
-    Slider:
+    Slider: #top slider
         id: accel
         min: 0
         max: 25
         step: 1
         y: root.height * 0.2
-        size_hint: (1, 0.1)
+        size_hint: (1, 0.2)
+        size_hint_x: 0.9
         on_touch_up: root.velocity()
         on_touch_move: root.velocity()
-        #sensitivity: "handle"
 
     Label:
         text: str(accel.value)
-        x: root.width * 0.315
-        y: root.height * 0.33
+        x: root.width * 0.42
+        y: root.height * -0.20
         color: 0, 0, 0
+
+    Slider: #bottom slider
+        id: velocity
+        min: 0
+        max: 25
+        step: 1
+        y: root.height * 0.1
+        size_hint: (1, 0.1)
+        size_hint_x: 0.9
+        on_touch_up: root.velocity()
+        on_touch_move: root.velocity()
+
+    Label:
+        text: str(velocity.value)
+        x: root.width * 0.42
+        y: root.height * -0.35
+        color: 0, 0, 0
+
 
 <TrajectoryScreen>:
 
@@ -83,53 +84,64 @@
 
     Label:
         text: "Acceleration: "
+        x: root.width * -0.4
+        y: root.height * 0.4
+        color: 0, 0, 0, 1
 
     TextInput:
         id: acceleration
-        multinline: False
-        size_hint: (100/root.width, 100/root.height)
-        x: root.width * 0.315
-        y: root.height * 0.33
+        multiline: False
+        size_hint: (70/root.width, 70/root.height)
+        pos_hint: {"center_x": 0.16, "center_y": 0.90}
         color: 0, 0, 0
 
     Label:
         text: "Deceleration: "
+        x: root.width * -0.4
+        y: root.height * 0.3
+        color: 0, 0, 0, 1
 
     TextInput:
         id: deceleration
-        multinline: False
-        size_hint: (100/root.width, 100/root.height)
-        x: root.width * 0.66
-        y: root.height * 0.66
+        multiline: False
+        size_hint: (70/root.width, 70/root.height)
+        pos_hint: {"center_x": 0.16, "center_y": 0.80}
         color: 0, 0, 0
 
     Label:
         text: "Target Position: "
+        x: root.width * -0.4
+        y: root.height * 0.2
+        color: 0, 0, 0, 1
 
     TextInput:
         id: target
-        multinline: False
-        size_hint: (100/root.width, 100/root.height)
-        x: root.width * 0.1
-        y: root.height * 0.1
+        multiline: False
+        size_hint: (70/root.width, 70/root.height)
+        pos_hint: {"center_x": 0.16, "center_y": 0.70}
         color: 0, 0, 0
 
     Label:
         text: "Velocity: "
+        x: root.width * -0.4
+        y: root.height * 0.1
+        color: 0, 0, 0, 1
+
 
     TextInput:
         id: velo
         multinline: False
-        size_hint: (100/root.width, 100/root.height)
+        size_hint: (70/root.width, 70/root.height)
         x: root.width * 0.4
         y: root.height * 0.4
+        pos_hint: {"center_x": 0.16, "center_y": 0.60}
         color: 0, 0, 0
 
     DPEAButton:
         id: submit
         text:'Submit'
         size: 100, 100
-        pos_hint: {"center_x": 0.1, "center_y":0.1}
+        pos_hint: {"center_x": 0.25, "center_y": 0.75}
         color: 0, 1, 0, 1
         on_press: root.trapezoid()
 
