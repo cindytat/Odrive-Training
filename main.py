@@ -95,6 +95,10 @@ class TrajectoryScreen(Screen):
     """
     Class to handle the trajectory control screen and its associated touch events
     """
+    acceleration = ObjectProperty(None)
+    deceleration = ObjectProperty(None)
+    target = ObjectProperty(None)
+    velo = ObjectProperty(None)
 
     def switch_screen(self):
         SCREEN_MANAGER.transition.direction = "right"
@@ -102,13 +106,7 @@ class TrajectoryScreen(Screen):
 
     def trapezoid(self):
         print("Trapezoid")
-        ax.set_rel_pos_traj(float(self.target.text), float(self.acceleration.text), float(self.velo.text), float(self.deceleration.text))
-
-    acceleration = ObjectProperty(None)
-    deceleration = ObjectProperty(None)
-    target = ObjectProperty(None)
-    velo = ObjectProperty(None)
-
+        ax.set_rel_pos_traj(float(self.ids.target.text), float(self.ids.acceleration.text), float(self.ids.velo.text), float(self.ids.deceleration.text))
 
 class GPIOScreen(Screen):
     """
