@@ -1,6 +1,7 @@
 import os
 import sys
 
+#from adafruit_blinka.microcontroller.atheros.ar9331.pin import GPIO_1
 # os.environ['DISPLAY'] = ":0.0"
 # os.environ['KIVY_WINDOW'] = 'egl_rpi'
 
@@ -11,6 +12,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
+from kivy.clock import Clock
 
 from pidev.MixPanel import MixPanel
 from pidev.kivy.PassCodeScreen import PassCodeScreen
@@ -117,6 +119,11 @@ class GPIOScreen(Screen):
         SCREEN_MANAGER.transition.direction = "left"
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
 
+    def switch(self, dt=0):
+        print("Hello?")
+        if digital_read(od, 1) == 0:
+            print("WORK!")
+            Clock.unschedule(self.switch)
 
 class AdminScreen(Screen):
     """
