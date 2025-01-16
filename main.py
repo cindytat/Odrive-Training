@@ -13,6 +13,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
 from kivy.clock import Clock
+from dpea_odrive.odrive_helpers import digital_read
 
 from pidev.MixPanel import MixPanel
 from pidev.kivy.PassCodeScreen import PassCodeScreen
@@ -114,16 +115,40 @@ class GPIOScreen(Screen):
     """
     Class to handle the GPIO screen and its associated touch/listening events
     """
-
     def switch_screen(self):
         SCREEN_MANAGER.transition.direction = "left"
         SCREEN_MANAGER.current = MAIN_SCREEN_NAME
 
-    def switch(self, dt=0):
-        print("Hello?")
-        if digital_read(od, 1) == 0:
-            print("WORK!")
-            Clock.unschedule(self.switch)
+    def __init__(self, **kwargs):
+        super(GPIOScreen, self).__init__(**kwargs)
+        self.gpio_pin = 1
+        self.motor_move_distance = 5  # Distance for the motor to move when triggered
+        self.motor_speed = 10  # Speed at which the motor moves
+        self.motor_acceleration = 5  # Acceleration for the motor
+        self.motor_deceleration = 5  # Deceleration for the motor
+        self.check_gpio_interval = 0.1
+        self.motor_running = False
+
+    def on_enter(self):
+        ax.set_vel(10)
+        Clock.schedule_interval(self.check_gpio_state, self.check_gpio_interval)
+
+    def on_leave(self):
+        Clock.unschedule(self.check_gpio_state)
+
+    def check_gpio_state(self, dt):
+        switch_state = digital_read(od, self.gpio_pin)
+
+        if switch_state == 0:
+            ax.set_vel(0)
+        else:
+            ax.set_vel(10)
+
+    def start_motor(self):
+        self.motor_running = True
+        ax.set_rel_pos_traj(self.motor_move_distance, self.motor_acceleration, self.motor_speed, self.motor_deceleration)
+    def stop_motor(self):
+        self.motor_running = False
 
 class AdminScreen(Screen):
     """
